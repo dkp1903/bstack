@@ -1,0 +1,36 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>
+            Tail implementation
+        </title>
+        <script type="text/javascript" src="http://yui.yahooapis.com/3.6.0/build/yui/yui-min.js"></script>
+        <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+    </head>
+    <body>
+        <div id="files">Hello</div>
+        <div id="output"></div>
+        <script type="text/javascript">
+                YUI().use('node', () => {
+                    let path = window.location.pathname,
+                        output = Y.one('#output'),
+                        files = Y.one('#files'),
+                        socket = io.connect(path);
+
+                    socket.on('files', (data) => {
+                        console.log("hi:" + data)
+                        Y.log(data);
+                        output.append(data);
+                        Y.array.each(data, (file, index) => {
+                            files.append('<a href="/files/' + index + '">' + file+'</a>&nbsp;');
+                        });
+
+
+                    });
+                    socket.on('message', (data) => {
+                        output.append(data);
+                    })
+                })
+        </script>
+    </body>
+</html>
